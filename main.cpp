@@ -7,7 +7,7 @@ private:
     bool isNegative;
     std::vector<int> num;
 public:
-    explicit BigInteger(std::string number) {
+    BigInteger(std::string number) {
         if (number[0] == '-') {
             isNegative = true;
             for (size_t i = number.size() - 1; i > 0; i--)
@@ -31,7 +31,7 @@ public:
 
     void clearZero() {
         int temp = this->num.size() - 1;
-        while(this->num[temp] == 0 && temp > 0) {
+        while (this->num[temp] == 0 && temp > 0) {
             this->num.pop_back();
             temp--;
         }
@@ -40,6 +40,7 @@ public:
     BigInteger abs() {
         return {false, this->num};
     }
+
     void toString() {
         if (this->isNegative)
             std::cout << "-";
@@ -54,6 +55,22 @@ public:
         }
         if (!checkZero)
             std::cout << temp.back();
+    }
+
+    void toString(std::ofstream * out) {
+        if (this->isNegative)
+            *out << "-";
+        std::vector<int> temp = this->num;
+        reverse(temp.begin(), temp.end());
+        bool checkZero = false;
+        for (auto now : temp) {
+            if (now || checkZero) {
+                checkZero = true;
+                *out << now;
+            }
+        }
+        if (!checkZero)
+            *out << temp.back();
     }
 
     // a.comparator(b) a > b return 1, a == b return 0, a < b return -1;
@@ -257,14 +274,25 @@ int main(int argc, char **argv) {
         printf("There was no unexpected error, please try again");
         return 1;
     }
-    FILE *in = fopen(argv[1], "r");
-    if (!in) {
+    std::ifstream in(argv[1]);
+    if (!in.is_open()) {
         printf("Not found input file exception");
-        fclose(in);
+        in.close();
         return 1;
     }
-    std::string s1;
-    std::cin >> s1;
-    BigInteger(s1).sqrt().toString();
+    std::string a, operation, b;
+    in >> a >> operation;
+    std::ofstream out(argv[2]);
+    if (!out.is_open()) {
+        printf("Not found output file exception");
+        out.close();
+        return 1;
+    }
+    if (operation != "#") {
+        in >> b;
+    } else {
+        BigInteger(a).sqrt().toString(&out);
+    }
+    in.close();
     return 0;
 }
