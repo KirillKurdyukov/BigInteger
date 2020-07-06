@@ -32,6 +32,7 @@ public:
     bool NaN() const {
         return isNaN;
     }
+
     void clearZero() {
         int temp = this->num.size() - 1;
         while (this->num[temp] == 0 && temp > 0) {
@@ -45,7 +46,7 @@ public:
     }
 
     void toString() const {
-        if(this->isNaN) {
+        if (this->isNaN) {
             std::cout << "NaN";
             return;
         }
@@ -65,7 +66,7 @@ public:
     }
 
     void toString(std::ofstream &out) const {
-        if(this->isNaN) {
+        if (this->isNaN) {
             out << "NaN";
             return;
         }
@@ -247,8 +248,8 @@ public:
                             newObject.push_back(0);
                         }
                         newObject.push_back(k);
-                        BigInteger cnt = {false, newObject};
-                        ans = ans.add(cnt);
+                        BigInteger t = {false, newObject};
+                        ans = ans.add(t);
                         reverse(ranks.begin(), ranks.end());
                         BigInteger cur = {false, ranks};
                         temp = temp.subtract(cur);
@@ -289,6 +290,16 @@ public:
         return l;
     }
 
+    BigInteger (int number) {
+        isNegative = number < 0;
+        if (number == 0)
+            num.push_back(0);
+        while (std::abs(number) > 0) {
+            num.push_back(number % 10);
+            number /= 10;
+        }
+    }
+
     BigInteger(bool NaN) : isNaN(NaN) {}
 
     BigInteger() = default;
@@ -314,7 +325,7 @@ BigInteger operator%(BigInteger &a, BigInteger &b) {
     return a.mod(b);
 }
 
-std::ostream& operator<<(std::ofstream &out, const BigInteger &number) {
+std::ostream &operator<<(std::ofstream &out, const BigInteger &number) {
     number.toString(out);
     return out;
 }
@@ -400,7 +411,22 @@ int main(int argc, char **argv) {
                 break;
         }
         if (operation == ">") {
-            out << (a > b);
+            out << BigInteger(a > b);
+        }
+        if (operation == "<") {
+            out << BigInteger(a < b);
+        }
+        if (operation == "<=") {
+            out << BigInteger(a <= b);
+        }
+        if (operation == ">=") {
+            out << BigInteger(a >= b);
+        }
+        if (operation == "==") {
+            out << BigInteger(a == b);
+        }
+        if (operation == "!=") {
+            out << BigInteger(a != b);
         }
     } else {
         out << sqrt(a);
