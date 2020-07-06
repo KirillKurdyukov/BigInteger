@@ -11,7 +11,7 @@ private:
     bool isNegative{};
     std::vector<int> num;
 public:
-    BigInteger(std::string number) {
+    explicit BigInteger(std::string number) {
         if (number[0] == '-') {
             isNegative = true;
             for (size_t i = number.size() - 1; i > 0; i--)
@@ -230,7 +230,7 @@ public:
             return BigInteger(number.isNegate() ^ this->isNegative, {1});
         cnt = {false, {0}};
         if (number.comparator(cnt) == 0) {
-            return true;
+            return BigInteger(true);
         }
         BigInteger ans = {false, {0}};
         while (temp.comparator(number) >= 0) {
@@ -277,7 +277,7 @@ public:
         BigInteger a = {false, {0}};
         BigInteger b = {false, {1}};
         if (this->comparator(a) == -1) {
-            return true;
+            return BigInteger(true);
         }
         if (this->comparator(a) == 0 || this->comparator(b) == 0)
             return {this->isNegative, this->num};
@@ -294,7 +294,7 @@ public:
         return l;
     }
 
-    BigInteger (int number) {
+    explicit BigInteger (int number) {
         isNegative = number < 0;
         if (number == 0)
             num.push_back(0);
@@ -304,7 +304,7 @@ public:
         }
     }
 
-    BigInteger(bool NaN) : isNaN(NaN) {}
+    explicit BigInteger(bool NaN) : isNaN(NaN) {}
 
     BigInteger() = default;
 };
@@ -334,40 +334,29 @@ std::ostream &operator<<(std::ofstream &out, const BigInteger &number) {
     return out;
 }
 
-int operator>(BigInteger &a, BigInteger &b) {
-    if (a.comparator(b) == 1)
-        return 1;
-    else return 0;
+bool operator>(BigInteger &a, BigInteger &b) {
+    return a.comparator(b) == 1;
 }
 
-int operator<(BigInteger &a, BigInteger &b) {
-    if (a.comparator(b) == -1)
-        return 1;
-    else return 0;
+bool operator<(BigInteger &a, BigInteger &b) {
+    return a.comparator(b) == -1;
 }
 
-int operator==(BigInteger &a, BigInteger &b) {
-    if (a.comparator(b) == 0)
-        return 1;
-    else return 0;
+bool operator==(BigInteger &a, BigInteger &b) {
+    return a.comparator(b) == 0;
 }
 
-int operator!=(BigInteger &a, BigInteger &b) {
-    if (a.comparator(b) != 0)
-        return 1;
-    else return 0;
+bool operator!=(BigInteger &a, BigInteger &b) {
+    return a.comparator(b) != 0;
 }
 
-int operator>=(BigInteger &a, BigInteger &b) {
-    if (a.comparator(b) >= 0)
-        return 1;
-    else return 0;
+bool operator>=(BigInteger &a, BigInteger &b) {
+    return a.comparator(b) >= 0;
 }
 
-int operator<=(BigInteger &a, BigInteger &b) {
-    if (a.comparator(b) <= 0)
-        return 1;
-    else return 0;
+bool operator<=(BigInteger &a, BigInteger &b) {
+    return a.comparator(b) <= 0;
+
 }
 
 BigInteger sqrt(BigInteger &a) {
@@ -415,22 +404,22 @@ int main(int argc, char **argv) {
                 break;
         }
         if (operation == ">") {
-            out << BigInteger(a > b);
+            out << (a > b);
         }
         if (operation == "<") {
-            out << BigInteger(a < b);
+            out << (a < b);
         }
         if (operation == "<=") {
-            out << BigInteger(a <= b);
+            out << (a <= b);
         }
         if (operation == ">=") {
-            out << BigInteger(a >= b);
+            out << (a >= b);
         }
         if (operation == "==") {
-            out << BigInteger(a == b);
+            out << (a == b);
         }
         if (operation == "!=") {
-            out << BigInteger(a != b);
+            out << (a != b);
         }
     } else {
         out << sqrt(a);
