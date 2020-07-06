@@ -234,7 +234,7 @@ public:
         }
         BigInteger ans = {false, {0}};
         while (temp.comparator(number) >= 0) {
-            bool flag = false;
+            bool iterationDone = false;
             for (int i = temp.getNumber().size() - 1; i >= 0; i--) {
                 std::vector<int> ranks;
                 for (int j = i; j < temp.getNumber().size(); j++) {
@@ -243,7 +243,7 @@ public:
                 for (int k = 9; k > 0; k--) {
                     cnt = BigInteger(false, {k}).multiply(number);
                     if (BigInteger(false, ranks).comparator(cnt) >= 0) {
-                        flag = true;
+                        iterationDone = true;
                         ranks = BigInteger(false, {k}).multiply(number).getNumber();
                         reverse(ranks.begin(), ranks.end());
                         std::vector<int> newObject;
@@ -258,10 +258,10 @@ public:
                         BigInteger cur = {false, ranks};
                         temp = temp.subtract(cur);
                     }
-                    if (flag)
+                    if (iterationDone)
                         break;
                 }
-                if (flag)
+                if (iterationDone)
                     break;
             }
         }
